@@ -1,0 +1,72 @@
+<html>
+  <head>
+    <title>koch fractal</title>
+  </head>
+  <body>
+    <canvas id="koch" style="background-color: black"></canvas>
+    <script>
+      var koch = document.getElementById("koch");
+      var width = window.innerWidth - 20;
+      var height = window.innerHeight - 20;
+      koch.setAttribute("width", width);
+      koch.setAttribute("height", height);
+      var ctx = koch.getContext("2d");
+      ctx.beginPath();
+      ctx.strokeStyle = "#" + Math.floor(Math.random() * 16777215).toString(16);
+
+      var point1 = [width / 3, height / 3];
+      var point2 = [width - point1[0], height / 3];
+      var point3 = calculate3rdVertexOfEquilateralTriangle(point2, point1);
+
+      drawKock(point1, point2, 4);
+      drawKock(point2, point3, 4);
+      drawKock(point3, point1, 4);
+
+      function drawKock(a, b, step) {
+        var point1 = calculateThePointOnOneThirdOfTheLine(a, b);
+        var point3 = calculateThePointOnTwoThirdOfTheLine(a, b);
+        var point2 = calculate3rdVertexOfEquilateralTriangle(point1, point3);
+
+        if (step === 0) {
+          drawLine(a, point1);
+          drawLine(point1, point2);
+          drawLine(point2, point3);
+          drawLine(point3, b);
+        } else {
+          drawKock(a, point1, step - 1);
+          drawKock(point1, point2, step - 1);
+          drawKock(point2, point3, step - 1);
+          drawKock(point3, b, step - 1);
+        }
+      }
+
+      function drawLine(a, b) {
+        ctx.moveTo(a[0], a[1]);
+        ctx.lineTo(b[0], b[1]);
+        ctx.stroke();
+      }
+
+      function calculateThePointOnOneThirdOfTheLine(point1, point2) {
+        return [point1[0] + (point2[0] - point1[0]) / 3, point1[1] + (point2[1] - point1[1]) / 3];
+      }
+
+      function calculateThePointOnTwoThirdOfTheLine(point1, point2) {
+        return [
+          point1[0] + ((point2[0] - point1[0]) * 2) / 3,
+          point1[1] + ((point2[1] - point1[1]) * 2) / 3,
+        ];
+      }
+
+      function calculate3rdVertexOfEquilateralTriangle(point1, point2) {
+        return [
+          Math.cos(Math.PI / 3) * (point1[0] - point2[0]) -
+            Math.sin(Math.PI / 3) * (point1[1] - point2[1]) +
+            point2[0],
+          Math.sin(Math.PI / 3) * (point1[0] - point2[0]) +
+            Math.cos(Math.PI / 3) * (point1[1] - point2[1]) +
+            point2[1],
+        ];
+      }
+    </script>
+  </body>
+</html>
