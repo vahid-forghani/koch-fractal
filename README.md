@@ -1,2 +1,2 @@
 # koch-fractal
-Draw beautiful koch fractal using Canvas and JavaScript
+Draw beautiful koch fractal by recursive method using Canvas and JavaScript
